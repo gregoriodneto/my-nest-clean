@@ -1,0 +1,12 @@
+import { Create<%= pascalName %>Dto } from 'src/<%= kebabName %>/interface/http/dto/create-<%= kebabName %>.dto';
+import { Update<%= pascalName %>Dto } from 'src/<%= kebabName %>/interface/http/dto/update-<%= kebabName %>.dto';
+import { <%= pascalName %> } from '../entities/<%= kebabName %>.entity';
+
+export abstract class I<%= pascalName %>RepositoryPort {
+  abstract findMany(): Promise<<%= pascalName %>[]>;
+  abstract create(data: Create<%= pascalName %>Dto): Promise<<%= pascalName %>>;
+  abstract findOne(query: object): Promise<<%= pascalName %> | null>;
+  abstract update(id: string, data: Update<%= pascalName %>Dto): Promise<<%= pascalName %> | null>;
+}
+
+export const <%= constantName %>_REPOSITORY = Symbol('<%= constantName %>_REPOSITORY');

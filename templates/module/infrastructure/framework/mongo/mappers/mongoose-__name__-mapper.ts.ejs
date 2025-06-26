@@ -1,0 +1,17 @@
+import { <%= pascalName %> as <%= pascalName %>Entity } from 'src/<%= kebabName %>/domain/entities/<%= kebabName %>.entity';
+import { <%= pascalName %> as <%= pascalName %>Document } from '../entities/<%= kebabName %>.entity';
+
+export class Mongoose<%= pascalName %>Mapper {
+  static toDomain(doc: <%= pascalName %>Document): <%= pascalName %>Entity {
+    const entity = new <%= pascalName %>Entity();
+    entity.id = doc._id.toString();
+    return entity;
+  }
+
+  static toMongoose(entity: <%= pascalName %>Entity) {
+    const out: any = {
+      // Exemplo: code: entity.code
+    };
+    return out;
+  }
+}

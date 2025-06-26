@@ -1,0 +1,15 @@
+import { Inject, Injectable } from '@nestjs/common';
+import { I<%= pascalName %>RepositoryPort, <%= constantName %>_REPOSITORY } from 'src/<%= kebabName %>/domain/repositories/<%= kebabName %>.repository.port';
+import { Update<%= pascalName %>Dto } from 'src/<%= kebabName %>/interface/http/dto/update-<%= kebabName %>.dto';
+
+@Injectable()
+export class Update<%= pascalName %>UseCase {
+  constructor(
+    @Inject(<%= constantName %>_REPOSITORY)
+    private readonly repo: I<%= pascalName %>RepositoryPort,
+  ) {}
+
+  execute(id: string, dto: Update<%= pascalName %>Dto) {
+    return this.repo.update(id, dto);
+  }
+}

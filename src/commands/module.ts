@@ -1,7 +1,7 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import { camelCase, kebabCase, pascalCase } from 'change-case';
+import { camelCase, constantCase, kebabCase, pascalCase } from 'change-case';
 import { copyTemplate } from 'src/utils/copy-templates';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -16,7 +16,8 @@ export default async function moduleCommand(name: string, opts: { path: string }
     const naming = {
         kebabName: kebabCase(name), // user-profile
         pascalName: pascalCase(name), // UserProfile
-        camalName: camelCase(name)  // userProfie
+        camelName: camelCase(name),  // userProfie
+        constantName: constantCase(name) // USER_PROFILE
     }
 
     await copyTemplate(

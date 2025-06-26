@@ -1,0 +1,15 @@
+import { Inject, Injectable } from '@nestjs/common';
+import { <%= constantName %>_REPOSITORY, I<%= pascalName %>RepositoryPort } from 'src/<%= kebabName %>/domain/repositories/<%= kebabName %>-repository.port';
+import { Create<%= pascalName %>Dto } from 'src/<%= kebabName %>/interface/http/dto/create-<%= kebabName %>.dto';
+
+@Injectable()
+export class Create<%= pascalName %>UseCase {
+  constructor(
+    @Inject(<%= constantName %>_REPOSITORY)
+    private readonly repo: I<%= pascalName %>RepositoryPort,
+  ) {}
+
+  execute(dto: Create<%= pascalName %>Dto) {
+    return this.repo.create(dto);
+  }
+}
