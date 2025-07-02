@@ -15,9 +15,11 @@ program
     .action(initCommand);
 
 program
-    .command('module <name>')
+    .command('module')
     .description('Adiciona um módulo com Clean Architecture')
+    .option('-n, --name <name>', 'Nome do Módulo')
     .option('-p, --path <dir>', 'Raiz da aplicação Nest', process.cwd())
+    .option('-j, --json <file>', 'JSON com valores para implementar o módulo', process.cwd())
     .action(moduleCommand);
 
 program.parse();

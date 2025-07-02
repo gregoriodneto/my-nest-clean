@@ -1,5 +1,7 @@
 export class <%= pascalName %> {
-  id: string;
+  <% fields.forEach(({ name, tsType }) => { -%> 
+  <%- name %> : <%- tsType  %>  
+  <% }) -%>
 
   constructor(props?: Partial<<%= pascalName %>>) {
     Object.assign(this, props);

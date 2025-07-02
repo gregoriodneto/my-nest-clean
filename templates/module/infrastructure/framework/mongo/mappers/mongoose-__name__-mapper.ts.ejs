@@ -5,12 +5,17 @@ export class Mongoose<%= pascalName %>Mapper {
   static toDomain(doc: <%= pascalName %>Document): <%= pascalName %>Entity {
     const entity = new <%= pascalName %>Entity();
     entity.id = doc._id.toString();
+<% fields.forEach(({ name }) => { if (name !== 'id') { -%>
+    entity.<%- name %> = doc.<%- name %>;
+<% } }) -%>
     return entity;
   }
 
   static toMongoose(entity: <%= pascalName %>Entity) {
     const out: any = {
-      // Exemplo: code: entity.code
+<% fields.forEach(({ name }) => { if (name !== 'id') { -%>
+      <%- name %>: entity.<%- name %>,
+<% } }) -%>
     };
     return out;
   }

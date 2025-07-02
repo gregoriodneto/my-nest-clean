@@ -1,0 +1,44 @@
+{
+  "task": {
+    "id": "string",
+    "title": "string",
+    "description": "string",
+    "isActive": "boolean",
+    "priority": "number",
+    "dueDate": "string",
+    "tags": ["string"],
+    "assignee": {
+      "id": "string",
+      "name": "string"
+    },
+    "subtasks": [
+      {
+        "id": "string",
+        "title": "string",
+        "completed": "boolean"
+      }
+    ]
+  },
+  "user": {
+    "id": "string",
+    "name": "string",
+    "email": "string",
+    "birthDate": "string",
+    "isVerified": "boolean",
+    "roles": ["string"],
+    "settings": {
+      "theme": "string",
+      "notifications": {
+        "email": "boolean",
+        "sms": "boolean"
+      }
+    }
+  },
+  "comment": {
+    "id": "string",
+    "taskId": "string",
+    "userId": "string",
+    "content": "string",
+    "createdAt": "string"
+  }
+}
