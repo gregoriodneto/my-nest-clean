@@ -1,0 +1,24 @@
+import { Inject, Injectable } from '@nestjs/common';
+import { Search<%= pascalName %>Repository } from 'src/<%= kebabName %>/infrastructure/freamework/search/search-category.repository';
+import { <%= pascalName %> } from 'src/<%= kebabName %>/domain/entities/<%= kebabName %>.entity';
+import { I<%= pascalName %>RepositoryPort, <%= constantName %>_REPOSITORY } from 'src/<%= kebabName %>/domain/repositories/<%= kebabName %>.repository.port';
+
+@Injectable()
+export class Delete<%= pascalName %>UseCase {
+  constructor(
+    @Inject(<%= constantName %>_REPOSITORY)
+    private readonly repo: I<%= pascalName %>RepositoryPort,
+    private readonly searchRepository: Search<%= pascalName %>Repository
+  ) {}
+
+  async execute(id: string): Promise<void> {
+    const exists = await this.repo.findOne({ id });
+
+    if (!exists) {
+      throe new NotFoundException('<%= pascalName %> not found');
+    }
+
+    await this.repo.delete(id);
+    await this.searchRepository.delete(id);
+  }
+}

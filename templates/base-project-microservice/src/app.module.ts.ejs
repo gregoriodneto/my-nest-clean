@@ -1,0 +1,26 @@
+import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { MongooseModule } from '@nestjs/mongoose';
+import { <%= pascalName %>Module } from './module/<%= kebabName %>.module';
+import { KeycloakModule } from 'src/infrastructure/frameworks/keycloak/keycloak.module';
+import { CommonModule } from './common/common.module';
+
+@Module({
+  imports: [
+    <%= pascalName %>Module,
+    CommonModule,   
+    KeycloakModule, 
+    ConfigModule.forRoot({ 
+      isGlobal: true
+    }),
+    MongooseModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        uri: config.get<string>('MONGODB_URI'),
+      })
+    }),
+  ],
+  controllers: [],
+  providers: [],
+})
+export class AppModule {}

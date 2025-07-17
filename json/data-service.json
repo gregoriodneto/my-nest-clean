@@ -1,0 +1,11 @@
+{
+  "task": {
+    "id": "string",
+    "title": "string",
+    "description": "string",
+    "isActive": "boolean",
+    "priority": "number",
+    "dueDate": "string",
+    "tags": ["string"]
+  }
+}

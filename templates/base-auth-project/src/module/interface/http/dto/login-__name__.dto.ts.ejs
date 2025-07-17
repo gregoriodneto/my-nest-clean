@@ -1,0 +1,8 @@
+import { ApiProperty } from '@nestjs/swagger';
+
+export class Login<%= pascalName %>Dto {
+    @ApiProperty({ example: "E-mail", description: "E-mail do usuário" })
+    email: string;
+    @ApiProperty({ example: "Password", description: "Senha do usuário" })
+    password: string;
+}

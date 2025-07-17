@@ -1,0 +1,42 @@
+import { Inject, Injectable } from "@nestjs/common";
+import { <%= pascalName %> } from "src/<%= kebabName %>/domain/entities/<%= kebabName %>.entity";
+import { ELASTIC_REPOSITORY, IElasticsearch } from "src/common/domain/elasticsearch/elasticsearch.interface";
+
+@Injectable()
+export class Search<%= pascalName %>Repository {
+    constructor(@Inject(ELASTIC_REPOSITORY) private readonly elastic: IElasticsearch) { }
+
+    async save(doc: <%= pascalName %>) {
+        await this.elastic.save<<%= pascalName %>>({
+            index: 'categories',
+            id: doc.id,
+            body: doc
+        });
+    }
+
+    async search(term: string) {
+        return await this.elastic.search<<%= pascalName %>>({
+            index: 'categories',
+            query: { match: { name: term } }
+        })
+    }
+
+    async delete(id: string) {
+        await this.elastic.delete(
+            'categories',
+            id
+        );
+    }
+
+    async update(id: string, doc: <%= pascalName %>) {
+        return await this.elastic.update<<%= pascalName %>>(
+            'categories',
+            id,
+            doc
+        );
+    }
+
+    async exists(index: string, id: string) {
+        return await this.elastic.exists(index, id);
+    }
+}

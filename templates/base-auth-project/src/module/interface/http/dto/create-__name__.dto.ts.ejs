@@ -1,0 +1,8 @@
+import { ApiProperty } from '@nestjs/swagger';
+
+export class Create<%= pascalName %>Dto {
+  <% fields.forEach(({ name, tsType }) => { -%> 
+    @ApiProperty({ example: "<%- name %>", description: "<%- name %>" }) 
+    <%- name %> : <%- tsType  %> 
+  <% }) -%>
+}

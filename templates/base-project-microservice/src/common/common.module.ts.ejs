@@ -1,0 +1,15 @@
+import { Global, Module } from '@nestjs/common';
+import { SearchModule } from './infrastructure/search/search.module';
+import { SearchService } from './infrastructure/search/search.service';
+import { ELASTIC_REPOSITORY } from './domain/elasticsearch/elasticsearch.interface';
+
+@Global()
+@Module({
+  imports: [SearchModule],
+  providers: [
+    SearchService,
+    { provide: ELASTIC_REPOSITORY, useExisting: SearchService },
+  ],
+  exports: [ELASTIC_REPOSITORY], 
+})
+export class CommonModule {}

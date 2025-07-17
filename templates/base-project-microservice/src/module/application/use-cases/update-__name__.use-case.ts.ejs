@@ -1,0 +1,19 @@
+import { Inject, Injectable } from '@nestjs/common';
+import { Search<%= pascalName %>Repository } from 'src/<%= kebabName %>/infrastructure/freamework/search/search-category.repository';
+import { I<%= pascalName %>RepositoryPort, <%= constantName %>_REPOSITORY } from 'src/<%= kebabName %>/domain/repositories/<%= kebabName %>.repository.port';
+import { Update<%= pascalName %>Dto } from 'src/<%= kebabName %>/interface/http/dto/update-<%= kebabName %>.dto';
+
+@Injectable()
+export class Update<%= pascalName %>UseCase {
+  constructor(
+    @Inject(<%= constantName %>_REPOSITORY)
+    private readonly repo: I<%= pascalName %>RepositoryPort,
+    private readonly searchRepository: Search<%= pascalName %>Repository
+  ) {}
+
+  async execute(id: string, dto: Update<%= pascalName %>Dto) {
+    const updated = await this.repo.update(id, dto);
+    await this.searchRepository.save(updated);
+    return updated;
+  }
+}

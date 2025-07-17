@@ -1,0 +1,17 @@
+import { Inject, Injectable } from '@nestjs/common';
+import { ClientKafka } from '@nestjs/microservices';
+
+@Injectable()
+export class KafkaService {
+  constructor(@Inject('KAFKA_SERVICE') private readonly client: ClientKafka) {}
+
+  async onModuleInit() {
+    // Precisamos se inscrever nos tópicos para consumir mensagens
+    // Caso só envie mensagens, pode ser ignorado
+    await this.client.connect();
+  }
+
+  async sendMessage(topic: string, message: any) {
+    return this.client.emit(topic, message);
+  }
+}

@@ -1,0 +1,15 @@
+import { Inject, Injectable } from '@nestjs/common';
+import { <%= pascalName %> } from 'src/<%= kebabName %>/domain/entities/<%= kebabName %>.entity';
+import { I<%= pascalName %>RepositoryPort, <%= constantName %>_REPOSITORY } from 'src/<%= kebabName %>/domain/repositories/<%= kebabName %>.repository.port';
+
+@Injectable()
+export class FindMany<%= pascalName %>sUseCase {
+  constructor(
+    @Inject(<%= constantName %>_REPOSITORY)
+    private readonly repo: I<%= pascalName %>RepositoryPort,
+  ) {}
+
+  execute(): Promise<<%= pascalName %>[]> {
+    return this.repo.findMany();
+  }
+}

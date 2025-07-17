@@ -1,0 +1,30 @@
+import { Inject, Injectable } from '@nestjs/common';
+import { Search<%= pascalName %>Repository } from 'src/<%= kebabName %>/infrastructure/freamework/search/search-category.repository';
+import { <%= constantName %>_REPOSITORY, I<%= pascalName %>RepositoryPort } from 'src/<%= kebabName %>/domain/repositories/<%= kebabName %>-repository.port';
+import { RegisterDto } from 'src/<%= kebabName %>/interface/http/dto/register.dto';
+import { KeycloakService } from 'src/auth/infrastructure/keycloak/keycloak.service';
+
+@Injectable()
+export class Register<%= pascalName %>UseCase {
+  constructor(
+    @Inject(<%= constantName %>_REPOSITORY)
+    private readonly repo: I<%= pascalName %>RepositoryPort,
+    private readonly searchRepository: Search<%= pascalName %>Repository,
+    private readonly keycloakService: KeycloakService,
+  ) {}
+
+  async execute(dto: RegisterDto) {
+    const { email, password } = dto;
+
+    const existing = await this.repo.findByEmail(email);
+    if (existing) {
+      throw new ConflictException('Usuário já existe');
+    }
+
+    const keyclockUserId = await this.keycloakService.createUser(email, password);
+
+    const response = await this.repo.create({ keycloakId:keyclockUserId, email  });
+    await this.searchRepository.save(response);
+    return response;
+  }
+}

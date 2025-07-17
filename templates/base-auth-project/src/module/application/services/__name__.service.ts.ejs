@@ -1,0 +1,59 @@
+import { Injectable } from '@nestjs/common';
+import { Create<%= pascalName %>UseCase } from '../use-cases/create-<%= kebabName %>.use-case';
+import { Update<%= pascalName %>UseCase } from '../use-cases/update-<%= kebabName %>.use-case';
+import { FindMany<%= pascalName %>sUseCase } from '../use-cases/find-many-<%= kebabName %>.use-case';
+import { FindOne<%= pascalName %>UseCase } from '../use-cases/find-one-<%= kebabName %>.use-case';
+import { Delete<%= pascalName %>UseCase } from '../use-cases/delete-<%= kebabName %>.use-case';
+import { Register<%= pascalName %>UseCase } from '../use-cases/register-<%= kebabName %>.use-case';
+import { Login<%= pascalName %>UseCase } from '../use-cases/login-<%= kebabName %>.use-case';
+import { Logout<%= pascalName %>UseCase } from '../use-cases/logout-<%= kebabName %>.use-case';
+import { Create<%= pascalName %>Dto } from '../../interface/http/dto/create-<%= kebabName %>.dto';
+import { Update<%= pascalName %>Dto } from '../../interface/http/dto/update-<%= kebabName %>.dto';
+import { Register<%= pascalName %>Dto } from '../../interface/http/dto/register<%= kebabName %>.dto';
+import { Login<%= pascalName %>Dto } from '../../interface/http/dto/login-<%= kebabName %>.dto';
+
+@Injectable()
+export class <%= pascalName %>Service {
+  constructor(
+    private readonly create<%= pascalName %>UC:   Create<%= pascalName %>UseCase,
+    private readonly update<%= pascalName %>UC:   Update<%= pascalName %>UseCase,
+    private readonly findMany<%= pascalName %>sUC: FindMany<%= pascalName %>sUseCase,
+    private readonly findOne<%= pascalName %>UC:   FindOne<%= pascalName %>UseCase,
+    private readonly delete<%= pascalName %>UC:   Delete<%= pascalName %>UseCase,
+    private readonly register<%= pascalName %>UC:   Register<%= pascalName %>UseCase,
+    private readonly login<%= pascalName %>UC:   Login<%= pascalName %>UseCase,
+    private readonly logout<%= pascalName %>UC:   Logout<%= pascalName %>UseCase,
+  ) {}
+
+  async create(dto: Create<%= pascalName %>Dto) {
+    return await this.create<%= pascalName %>UC.execute(dto);
+  }
+
+  async update(id: string, dto: Update<%= pascalName %>Dto) {
+    return await this.update<%= pascalName %>UC.execute(id, dto);
+  }
+
+  async register(dto: Register<%= pascalName %>Dto) {
+    return await this.register<%= pascalName %>UC.execute(dto);
+  }
+
+  async login(dto: Login<%= pascalName %>Dto) {
+    return await this.update<%= pascalName %>UC.execute(id, dto);
+  }
+
+  async logout(refreshToken: string) {
+    return await this.logout<%= pascalName %>UC.execute(refreshToken);
+  }
+
+  async findAll() {
+    return await this.findMany<%= pascalName %>sUC.execute();
+  }
+
+  async findOne(id: string) {
+    return await this.findOne<%= pascalName %>UC.execute(id);
+  }
+
+  async delete(id: string) {
+    return await this.delete<%= pascalName %>UC.execute(id);
+  }
+}

@@ -1,0 +1,37 @@
+services:
+    gateway:
+        build: ./gateway
+        ports:
+        - "3000:3000"
+        environment:
+            - KAFKA_BROKER: kafka:9092
+            - KEYCLOAK_URL: http://keycloak:8080/auth
+            - KEYCLOAK_REALM: myrealm
+            - KEYCLOAK_CLIENT_ID: gateway
+            - KEYCLOAK_CLIENT_SECRET: mysecret
+        depends_on:
+        - kafka
+        - keycloak
+
+    kafka:
+        image: bitnami/kafka:latest
+        ports:
+        - "9092:9092"
+        environment:
+            - KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper:2181
+            - KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+            - ALLOW_PLAINTEXT_LISTENER: yes
+
+    zookeeper:
+        image: bitnami/zookeeper:latest
+        ports:
+        - "2181:2181"
+
+    keycloak:
+        image: quay.io/keycloak/keycloak:22.0.0
+        command: start-dev
+        environment:
+            - KEYCLOAK_ADMIN: admin
+            - KEYCLOAK_ADMIN_PASSWORD: admin
+        ports:
+        - "8080:8080"

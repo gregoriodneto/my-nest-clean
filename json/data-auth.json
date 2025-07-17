@@ -1,0 +1,12 @@
+{
+  "auth": {
+    "id": "string",
+    "nome": "string",
+    "email": "string",
+    "telefone": "string",
+    "cpf": "string",
+    "senha": "string", 
+    "dataNascimento": "string",
+    "status": "'boolean"
+  }
+}

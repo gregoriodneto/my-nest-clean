@@ -1,0 +1,43 @@
+import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
+
+import { <%= pascalName %>Controller } from './interface/http/controllers/<%= kebabName %>.controller';
+import { Message<% pascalName %>ConsumerController } from './interface/http/controllers/message-<% kebabName %>-consumer.controller';
+import { Create<%= pascalName %>UseCase } from './application/use-cases/create-<%= kebabName %>.use-case';
+import { Update<%= pascalName %>UseCase } from './application/use-cases/update-<%= kebabName %>.use-case';
+import { FindOne<%= pascalName %>UseCase } from './application/use-cases/find-one-<%= kebabName %>.use-case';
+import { FindMany<%= pascalName %>sUseCase } from './application/use-cases/find-many-<%= kebabName %>s.use-case';
+import { Register<%= pascalName %>sUseCase } from './application/use-cases/register-<%= kebabName %>s.use-case';
+import { Login<%= pascalName %>sUseCase } from './application/use-cases/login-<%= kebabName %>s.use-case';
+import { Logout<%= pascalName %>sUseCase } from './application/use-cases/logout-<%= kebabName %>s.use-case';
+
+import { <%= pascalName %>Service } from './application/services/<%= kebabName %>.service';
+import { <%= pascalName %>, <%= pascalName %>Schema } from './infrastructure/framework/mongo/entities/<%= kebabName %>.entity';
+import { <%= constantName %>_REPOSITORY } from './domain/repositories/<%= kebabName %>.repository.port';
+import { Mongoose<%= pascalName %>Repository } from './infrastructure/framework/mongo/mongoose-<%= kebabName %>.repository';
+import { KafkaModule } from 'src/<%= kebabName %>/infrastructure/frameworks/kafka/kafka.module';
+
+@Module({
+  imports: [
+    KafkaModule,
+    MongooseModule.forFeature([
+      { name: <%= pascalName %>.name, schema: <%= pascalName %>Schema },
+    ]),
+  ],
+  controllers: [
+    <%= pascalName %>Controller,
+    Message<% pascalName %>ConsumerController,
+  ],
+  providers: [
+    <%= pascalName %>Service,
+    Create<%= pascalName %>UseCase,
+    Update<%= pascalName %>UseCase,
+    FindMany<%= pascalName %>sUseCase,
+    FindOne<%= pascalName %>UseCase,
+    Register<%= pascalName %>UseCase,
+    Login<%= pascalName %>UseCase,
+    Logout<%= pascalName %>UseCase,
+    { provide: <%= constantName %>_REPOSITORY, useClass: Mongoose<%= pascalName %>Repository },
+  ],
+})
+export class <%= pascalName %>Module {}

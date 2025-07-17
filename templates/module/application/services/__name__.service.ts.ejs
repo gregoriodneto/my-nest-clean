@@ -1,0 +1,34 @@
+import { Injectable } from '@nestjs/common';
+import { Create<%= pascalName %>UseCase } from 'src/<%= kebabName %>/application/use-cases/create-<%= kebabName %>.use-case';
+import { Update<%= pascalName %>UseCase } from 'src/<%= kebabName %>/application/use-cases/update-<%= kebabName %>.use-case';
+import { FindMany<%= pascalName %>sUseCase } from 'src/<%= kebabName %>/application/use-cases/find-many-<%= kebabName %>s.use-case';
+import { FindOne<%= pascalName %>UseCase } from 'src/<%= kebabName %>/application/use-cases/find-one-<%= kebabName %>.use-case';
+
+import { Create<%= pascalName %>Dto } from 'src/<%= kebabName %>/interface/http/dto/create-<%= kebabName %>.dto';
+import { Update<%= pascalName %>Dto } from 'src/<%= kebabName %>/interface/http/dto/update-<%= kebabName %>.dto';
+
+@Injectable()
+export class <%= pascalName %>Service {
+  constructor(
+    private readonly create<%= pascalName %>UC:   Create<%= pascalName %>UseCase,
+    private readonly update<%= pascalName %>UC:   Update<%= pascalName %>UseCase,
+    private readonly findMany<%= pascalName %>sUC: FindMany<%= pascalName %>sUseCase,
+    private readonly findOne<%= pascalName %>UC:   FindOne<%= pascalName %>UseCase,
+  ) {}
+
+  create(dto: Create<%= pascalName %>Dto) {
+    return this.create<%= pascalName %>UC.execute(dto);
+  }
+
+  update(id: string, dto: Update<%= pascalName %>Dto) {
+    return this.update<%= pascalName %>UC.execute(id, dto);
+  }
+
+  findAll() {
+    return this.findMany<%= pascalName %>sUC.execute();
+  }
+
+  findOne(id: string) {
+    return this.findOne<%= pascalName %>UC.execute({ _id: id });
+  }
+}

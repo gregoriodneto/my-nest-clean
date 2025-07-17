@@ -1,0 +1,49 @@
+import { Controller, Post, Body, UseGuards, Get, Param } from '@nestjs/common';
+import { KafkaService } from 'src/kafka/kafka.service';
+import { KeycloakGuards } from 'src/auth/keycloak.guard';
+import { Roles } from 'nest-keycloak-connect';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiBody, ApiParam } from '@nestjs/swagger';
+
+@ApiTags('Example')
+@ApiBearerAuth()
+@Controller('<%= kebabName %>')
+@UseGuards(...KeycloakGuards)
+export class <%= pascalName %>Controller {
+  constructor(private readonly kafka: KafkaService) {}
+
+  /* ────────────────────────────────────────────────
+     POST /<%= kebabName %>
+     Criação de entidade – Comunicação externa (REST) + interna (Kafka)
+  ──────────────────────────────────────────────── */
+  @Post()
+  @Roles({ roles: ['admin'] })
+  @ApiOperation({ summary: 'Criar entidade e publicar evento no Kafka' })
+  @ApiBody({ schema: { example: { name: 'Exemplo', description: 'Descrição da entidade' }}})
+  async create(@Body() body: any) {
+    // Emitindo evento Kafka (comunicação interna)
+    await this.kafka.emit('<%= kebabName %>.created', body);
+
+    // Retornando resposta externa (REST)
+    return {
+      message: 'Entidade criada com sucesso',
+      data: body,
+    };
+  }
+
+  /* ────────────────────────────────────────────────
+     GET /<%= kebabName %>/:id
+     Busca de entidade fictícia para simular comunicação REST
+  ──────────────────────────────────────────────── */
+  @Get(':id')
+  @Roles({ roles: ['user', 'admin'] })
+  @ApiOperation({ summary: 'Buscar entidade por ID' })
+  @ApiParam({ name: 'id', type: String, description: 'ID da entidade' })
+  findOne(@Param('id') id: string) {
+    // Aqui seria possível usar um client REST ou RPC para buscar dados
+    return {
+      id,
+      name: 'Entidade Exemplo',
+      description: 'Simulação de retorno REST para fins externos.',
+    };
+  }
+}

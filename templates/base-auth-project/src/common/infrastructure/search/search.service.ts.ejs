@@ -1,0 +1,49 @@
+import { Injectable } from '@nestjs/common';
+import { IElasticsearch, IFormatElasticsearchIndex, IFormatElasticsearchSearch } from '../../domain/elasticsearch/elasticsearch.interface';
+import { ElasticsearchService } from '@nestjs/elasticsearch';
+
+@Injectable()
+export class SearchService implements IElasticsearch {
+  constructor(private readonly es: ElasticsearchService) { }  
+
+  async save<T = any>(data: IFormatElasticsearchIndex): Promise<string> {
+    const res = await this.es.index<T>({
+      index: data.index,
+      id: data.id,
+      document: data.body,
+      refresh: 'wait_for'
+    });
+    return res._id;
+  }
+
+  async search<T = any>(data?: IFormatElasticsearchSearch): Promise<T[]> {
+    const { hits } = await this.es.search<T>({
+      index: data?.index,
+      query: data?.query
+    });
+    return hits.hits.map(h => h._source as T);
+  }
+
+  async delete(index: string, id: string): Promise<void> {
+    await this.es.delete({
+        index,
+        id,
+        refresh: 'wait_for'
+    });
+  }
+
+  async update<T = any>(index: string, id: string, doc: Partial<T>): Promise<T> {
+    await this.es.update<T>({
+      index,
+      id,
+      doc,
+      refresh: 'wait_for'
+    });
+    const { _source } = await this.es.get<T>({ index, id });
+    return _source as T;
+  }
+
+  async exists(index: string, id: string): Promise<boolean> {
+    return await this.es.exists({ index, id });
+  }
+}

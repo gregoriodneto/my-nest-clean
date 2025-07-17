@@ -1,0 +1,23 @@
+import { Module, Global } from '@nestjs/common';
+import { 
+    KeycloakConnectModule, 
+    ResourceGuard, 
+    RoleGuard, 
+    AuthGuard
+} from 'nest-keycloak-connect';
+import { KeycloakService } from './keycloak.service';
+
+@Global()
+@Module({
+  imports: [
+    KeycloakConnectModule.register({
+      authServerUrl: process.env.KEYCLOAK_AUTH_URL,
+      realm: process.env.KEYCLOAK_REALM,
+      clientId: process.env.KEYCLOAK_CLIENT_ID,
+      secret: process.env.KEYCLOAK_SECRET
+    }),
+  ],
+  providers: [AuthGuard, ResourceGuard, RoleGuard, KeycloakService],
+  exports: [AuthGuard, ResourceGuard, RoleGuard, KeycloakService],
+})
+export class KeycloakModule {}

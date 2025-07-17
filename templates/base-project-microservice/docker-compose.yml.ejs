@@ -1,0 +1,32 @@
+services:
+
+    <%= kebabName %>-service:
+        build:
+        context: .
+        container_name: <%= kebabName %>-service
+        ports:
+        - "3000:3000"
+        environment:
+        - NODE_ENV=development
+        - MONGO_URI=mongodb://<%= kebabName %>-mongo:27017/<%= kebabName %>
+        - ELASTICSEARCH_NODE=http://<%= kebabName %>-elastic:9200
+        depends_on:
+        - <%= kebabName %>-mongo
+        - <%= kebabName %>-elastic
+
+    <%= kebabName %>-mongo:
+        image: mongo:7
+        container_name: <%= kebabName %>-mongo
+        ports:
+        - "27017:27017"
+        volumes:
+        - ./mongo-data:/data/db
+
+    <%= kebabName %>-elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
+        container_name: <%= kebabName %>-elasticsearch
+        ports:
+        - "9200:9200"
+        environment:
+        - discovery.type=single-node
+        - xpack.security.enabled=false

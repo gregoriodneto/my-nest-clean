@@ -1,0 +1,21 @@
+import { Inject, Injectable } from '@nestjs/common';
+import { Search<%= pascalName %>Repository } from 'src/<%= kebabName %>/infrastructure/freamework/search/search-category.repository';
+import { <%= constantName %>_REPOSITORY, I<%= pascalName %>RepositoryPort } from 'src/<%= kebabName %>/domain/repositories/<%= kebabName %>-repository.port';
+import { Create<%= pascalName %>Dto } from 'src/<%= kebabName %>/interface/http/dto/create-<%= kebabName %>.dto';
+import { KeycloakService } from 'src/auth/infrastructure/keycloak/keycloak.service';
+
+@Injectable()
+export class Create<%= pascalName %>UseCase {
+  constructor(
+    @Inject(<%= constantName %>_REPOSITORY)
+    private readonly repo: I<%= pascalName %>RepositoryPort,
+    private readonly searchRepository: Search<%= pascalName %>Repository,
+    private readonly keycloakService: KeycloakService,
+  ) {}
+
+  async execute(dto: Create<%= pascalName %>Dto) {
+    const response = await this.repo.create(dto);
+    await this.searchRepository.save(response);
+    return response;
+  }
+}

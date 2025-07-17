@@ -1,0 +1,139 @@
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  ApiBody,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiOkResponse,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
+import {
+  AuthGuard,
+  ResourceGuard,
+  RoleGuard,
+} from 'nest-keycloak-connect';
+import { Permissions, Roles } from '../../decorators/roles.decorator';
+import { Create<%= pascalName %>Dto } from '../dto/create-<%= kebabName %>.dto';
+import { Update<%= pascalName %>Dto } from '../dto/update-<%= kebabName %>.dto';
+import { Login<%= pascalName %>Dto } from '../dto/login-<%= kebabName %>.dto';
+import { Register<%= pascalName %>Dto } from '../dto/register<%= kebabName %>.dto';
+import { <%= pascalName %>Service } from 'src/<%= kebabName %>/application/services/<%= kebabName %>.service';
+import { <%= pascalName %>Service } from '../../../application/services/auth.service';
+
+@ApiTags('<%= pascalName %>')
+@Controller('<%= kebabName %>')
+export class <%= pascalName %>Controller {
+  constructor(private readonly <%= camelName %>Service: <%= pascalName %>Service) {}
+  
+  /* ────────────────────────────────────────────────
+    REGISTER /<%= kebabName %>/register
+  ──────────────────────────────────────────────── */
+  @Post('register')
+  @ApiOperation({ summary: 'Registro do usuário' })
+  @ApiBody({ type: Register<%= pascalName %>Dto })
+  @ApiCreatedResponse({ description: 'Usuário registrado com sucesso' })
+  register(@Body() registerDto: Register<%= pascalName %>Dto) {
+    return this.<%= camelName %>Service.register(registerDto);
+  }
+
+  /* ────────────────────────────────────────────────
+    LOGIN /<%= kebabName %>/login
+  ──────────────────────────────────────────────── */
+  @Post('login')
+  @ApiOperation({ summary: 'Login do usuário' })
+  @ApiBody({ type: Login<%= pascalName %>Dto })
+  @ApiOkResponse({ description: 'Usuário autenticado com sucesso' })
+  login(@Body() loginDto: Login<%= pascalName %>Dto) {
+    return this.<%= camelName %>Service.login(loginDto);
+  }
+
+  /* ────────────────────────────────────────────────
+    LOGOUT /<%= kebabName %>/logout
+  ──────────────────────────────────────────────── */
+  @UseGuards(AuthGuard, ResourceGuard, RoleGuard)
+  @Post('logout')
+  @ApiOperation({ summary: 'Logout do usuário' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        refreshToken: { type: 'string' },
+      },
+    },
+  })
+  @ApiOkResponse({ description: 'Logout realizado com sucesso' })
+  logout(@Body('refreshToken') refreshToken: string) {
+    return this.<%= camelName %>Service.logout(refreshToken);
+  }
+
+  /* ────────────────────────────────────────────────
+     POST /<%= kebabName %>
+  ──────────────────────────────────────────────── */
+  @UseGuards(AuthGuard, ResourceGuard, RoleGuard)
+  @Post()
+  @Roles('admin')
+  @Permissions('<%= kebabName %>:create')
+  @ApiOperation({ summary: 'Criar <%= kebabName %>.' })
+  @ApiBody({ type: Create<%= pascalName %>Dto })
+  @ApiCreatedResponse({ description: '<%= pascalName %> criado com sucesso' })
+  create(@Body() dto: Create<%= pascalName %>Dto) {
+    return this.<%= camelName %>Service.create(dto);
+  }
+
+  /* ────────────────────────────────────────────────
+     PATCH /<%= kebabName %>/:id
+  ──────────────────────────────────────────────── */
+  @UseGuards(AuthGuard, ResourceGuard, RoleGuard)
+  @Patch(':id')
+  @Roles('admin', 'editor')
+  @Permissions('<%= kebabName %>:update')
+  @ApiOperation({ summary: 'Atualizar <%= kebabName %>.' })
+  @ApiParam({ name: 'id', description: 'ID do <%= kebabName %>', type: String })
+  @ApiBody({ type: Update<%= pascalName %>Dto })
+  @ApiOkResponse({ description: '<%= pascalName %> atualizado.' })
+  update(@Param('id') id: string, @Body() dto: Update<%= pascalName %>Dto) {
+    return this.<%= camelName %>Service.update(id, dto);
+  }
+
+  /* ────────────────────────────────────────────────
+     GET /<%= kebabName %>
+  ──────────────────────────────────────────────── */
+  @UseGuards(AuthGuard, ResourceGuard, RoleGuard)
+  @Get()
+  @Roles('user', 'admin')
+  @Permissions('<%= kebabName %>:read')
+  @ApiOperation({ summary: 'Listar <%= kebabName %>.' })
+  @ApiOkResponse({ description: 'Lista de <%= kebabName %>.' })
+  findAll() {
+    return this.<%= camelName %>Service.findAll();
+  }
+
+  /* ────────────────────────────────────────────────
+     GET /<%= kebabName %>/:id
+  ──────────────────────────────────────────────── */
+  @UseGuards(AuthGuard, ResourceGuard, RoleGuard)
+  @Get(':id')
+  @Roles('user', 'admin')
+  @Permissions('<%= kebabName %>:read')
+  @ApiOperation({ summary: 'Buscar <%= kebabName %> por ID.' })
+  @ApiParam({ name: 'id', description: 'ID do <%= kebabName %>', type: String })
+  @ApiOkResponse({ description: '<%= pascalName %> encontrado.' })
+  findOne(@Param('id') id: string) {
+    return this.<%= camelName %>Service.findOne(id);
+  }
+
+  /* ────────────────────────────────────────────────
+     DELETE /<%= kebabName %>/:id
+  ──────────────────────────────────────────────── */
+  @UseGuards(AuthGuard, ResourceGuard, RoleGuard)
+  @Delete(':id')  
+  @Roles('admin')
+  @Permissions('<%= kebabName %>:delete')
+  @ApiOperation({ summary: 'Deletar <%= kebabName %> por ID.' })
+  @ApiParam({ name: 'id', description: 'ID do <%= kebabName %>', type: String })
+  @ApiOkResponse({ description: '<%= pascalName %> deletado com sucesso.' })
+  delete(@Param('id') id: string) {
+    return this.<%= camelName %>Service.delete(id);
+  }
+}

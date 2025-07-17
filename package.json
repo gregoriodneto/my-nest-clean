@@ -1,0 +1,31 @@
+{
+  "name": "my-nest-clean",
+  "version": "1.0.0",
+  "type": "module",
+  "bin": {
+    "my-nest-clean": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "init": "npx tsx src/index.ts -- init",
+    "module": "npx tsx src/index.ts -- module",
+    "service": "npx tsx src/index.ts -- service",
+    "gateway": "npx tsx src/index.ts -- gateway"
+  },
+  "dependencies": {
+    "@types/change-case": "^0.0.30",
+    "change-case": "^5.4.4",
+    "commander": "^14.0.0",
+    "ejs": "^3.1.10",
+    "fs-extra": "^11.3.0",
+    "inquirer": "^12.7.0"
+  },
+  "devDependencies": {
+    "@types/ejs": "^3.1.5",
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^24.0.4",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
+  }
+}

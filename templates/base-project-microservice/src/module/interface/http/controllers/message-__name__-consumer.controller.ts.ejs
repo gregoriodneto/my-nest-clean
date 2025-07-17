@@ -1,0 +1,16 @@
+import { Controller, Logger } from '@nestjs/common';
+import { MessagePattern, Payload, Ctx, KafkaContext } from '@nestjs/microservices';
+
+@Controller()
+export class Message<% pascalName %>ConsumerController {
+    private readonly logger = new Logger(KafkaConsumerController.name);
+
+    @MessagePattern('<% kebabName %>-message-broker')
+    async handleMessage(@Payload() message: any, @Ctx() context: KafkaContext) {
+        const originalMessage = context.getMessage();
+        this.logger.log(`Mensagem recebida no tópico '<% kebabName %>-message-broker': ${JSON.stringify(message)}`);
+
+        // Aqui você processa a mensagem conforme lógica de negócio
+        // Por exemplo, disparar casos de uso, salvar dados, etc.
+    }
+}
