@@ -1,0 +1,21 @@
+{
+  "cupom": {
+    "id": "string",
+    "titulo": "string",
+    "descricao": "string",
+    "codigoInterno": "string",
+    "dataValidade": "string",
+    "quantidadeLimite": "number",
+    "produtoRelacionado": "string", 
+    "status": "string",
+    "regrasDeUso": "string", 
+    "desconto": "string"
+  },
+  "cupomUsuario": {
+    "id": "string",
+    "userId": "string",
+    "cupomId": "string",
+    "dataResgate": "string",
+    "utilizado": "boolean"
+  }
+}

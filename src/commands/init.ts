@@ -4,6 +4,7 @@ import fs from 'fs-extra';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { execSync } from 'child_process';
+import { camelCase, constantCase, kebabCase, pascalCase } from 'change-case';
 import { copyTemplate } from 'src/utils/copy-templates.ts';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -42,28 +43,31 @@ export default async function initCommand(
     // Cria a pasta
     await fs.ensureDir(targetDir);
 
-    // Copiando o template
-    if (answers.typeInit === 'ambient') {
-        await copyTemplate(
-            path.join(__dirname, '../../templates/base-ambient'),
-            targetDir,
-            { projectName }
-        );
-    } else {
-        await copyTemplate(
-            path.join(__dirname, '../../templates/base-project'),
-            targetDir,
-            { projectName }
-        );
+    const typeProject = answers.typeInit === 'ambient'
+        ? '../../templates/base-ambient'
+        : '../../templates/base-project';
 
-        // Instalando as dependências
-        try {
-            console.log('Instalando dependências...');
-            execSync('npm i', { cwd: targetDir, stdio: 'inherit' });
-        } catch (error) {
-            console.warn('⚠️ Falha ao instalar dependências. Você pode instalar manualmente com:');
-            console.warn(`cd ${targetDir} && npm install`);
-        }
+    const naming = {
+        kebabName: kebabCase(projectName), // user-profile
+        pascalName: pascalCase(projectName), // UserProfile
+        camelName: camelCase(projectName),  // userProfie
+        constantName: constantCase(projectName) // USER_PROFILE
+    }
+    
+    // Copiando o template
+    await copyTemplate(
+        path.join(__dirname, typeProject),
+        targetDir,
+        naming
+    );
+
+    // Instalando as dependências
+    try {
+        console.log('Instalando dependências...');
+        execSync('npm i', { cwd: targetDir, stdio: 'inherit' });
+    } catch (error) {
+        console.warn('⚠️ Falha ao instalar dependências. Você pode instalar manualmente com:');
+        console.warn(`cd ${targetDir} && npm install`);
     }
 
     console.log(`✅ Projeto criado em ${targetDir}`);

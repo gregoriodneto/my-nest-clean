@@ -1,0 +1,21 @@
+import { Inject, Injectable } from '@nestjs/common';
+import { ELASTIC_REPOSITORY, IElasticsearchPort } from '../../domain/repositories/elasticsearch.repository.port';
+import { <%= pascalName %> } from 'src/<%= kebabName %>/domain/entities/<%= kebabName %>.entity';
+import { I<%= pascalName %>RepositoryPort, <%= constantName %>_REPOSITORY } from 'src/<%= kebabName %>/domain/repositories/<%= kebabName %>.repository.port';
+
+@Injectable()
+export class FindMany<%= pascalName %>sUseCase {
+  constructor(
+    @Inject(<%= constantName %>_REPOSITORY)
+    private readonly repo: I<%= pascalName %>RepositoryPort,
+    @Inject(ELASTIC_REPOSITORY)
+    private readonly searchRepository: IElasticsearchPort,
+  ) {}
+
+  async execute(filters?: Partial<<%= pascalName %>>): Promise<<%= pascalName %>[]> {
+    if (filters && Object.keys(filters).length > 0) {
+      return await this.searchRepository.search(query); // usando o Elasticsearch
+    }
+    return await this.repo.findMany();
+  }
+}

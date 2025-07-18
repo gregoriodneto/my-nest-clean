@@ -35,6 +35,7 @@ program
     .command('module')
     .description('Adiciona um módulo com Clean Architecture')
     .option('-n, --name <name>', 'Nome do Módulo')
+    .option('-m, --module <module>', 'Tipo do módulo (simple/microservice)')
     .option('-p, --path <dir>', 'Raiz da aplicação Nest', process.cwd())
     .option('-j, --json <file>', 'JSON com valores para implementar o módulo', process.cwd())
     .action(moduleCommand);

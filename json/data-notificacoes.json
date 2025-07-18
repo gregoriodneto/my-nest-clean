@@ -1,0 +1,10 @@
+{
+  "suporte": {
+    "id": "string",
+    "userId": "string",
+    "tipoContato": "string",
+    "mensagem": "string",
+    "status": "string",
+    "dataSolicitacao": "string"
+  }
+}

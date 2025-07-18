@@ -1,0 +1,31 @@
+{
+  "metaEconomia": {
+    "id": "string",
+    "userId": "string",
+    "valorMensal": "number",
+    "dataDefinicao": "string"
+  },
+  "economia": {
+    "id": "string",
+    "userId": "string",
+    "mes": "number",
+    "ano": "number",
+    "valorEconomizado": "number"
+  },
+  "compra": {
+    "id": "string",
+    "userId": "string",
+    "lojaId": "string",
+    "dataCompra": "string",
+    "valorTotal": "number",
+    "economiaCalculada": "number"
+  },
+  "produtoCompra": {
+    "id": "string",
+    "compraId": "string",
+    "produtoId": "string",
+    "quantidade": "number",
+    "precoUnitario": "number",
+    "precoComDesconto": "number"
+  }
+}

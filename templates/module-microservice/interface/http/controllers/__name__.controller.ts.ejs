@@ -1,0 +1,111 @@
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  ApiBody,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
+import {
+  AuthGuard,
+  ResourceGuard,
+  RoleGuard,
+} from 'nest-keycloak-connect';
+import { Roles, Permissions } from 'src/interface/decorators/roles.decorator';
+import { Create<%= pascalName %>Dto } from '../dto/create-<%= kebabName %>.dto';
+import { Update<%= pascalName %>Dto } from '../dto/update-<%= kebabName %>.dto';
+
+import { <%= pascalName %>Service } from 'src/<%= kebabName %>/application/services/<%= kebabName %>.service';
+
+@ApiTags('<%= pascalName %>')
+@Controller('<%= kebabName %>')
+@UseGuards(AuthGuard, ResourceGuard, RoleGuard)
+export class <%= pascalName %>Controller {
+  constructor(private readonly <%= camelName %>Service: <%= pascalName %>Service) {}
+
+  <% if (kebabName === 'auth') {%>
+    /* ────────────────────────────────────────────────
+     LOGIN /<%= kebabName %>
+     ──────────────────────────────────────────────── */
+    @Post('login')
+    @ApiOperation({ summary: 'Login do usuário' })
+    login(@Body() loginDto: LoginDto) {
+      return this.<%= camelName %>Service.login(loginDto);
+    }
+
+    /* ────────────────────────────────────────────────
+     LOGOUT /<%= kebabName %>
+     ──────────────────────────────────────────────── */
+    @Post('logout')
+    @ApiOperation({ summary: 'Logout do usuário' })
+    logout() {
+      return this.<%= camelName %>Service.logout();
+    }
+  <% } %>
+
+  /* ────────────────────────────────────────────────
+     POST /<%= kebabName %>
+  ──────────────────────────────────────────────── */
+  @Post()
+  @Roles('admin')
+  @Permissions('<%= kebabName %>:create')
+  @ApiOperation({ summary: 'Criar <%= kebabName %>.' })
+  @ApiBody({ type: Create<%= pascalName %>Dto })
+  @ApiCreatedResponse({ description: '<%= pascalName %> criado com sucesso' })
+  create(@Body() dto: Create<%= pascalName %>Dto) {
+    return this.<%= camelName %>Service.create(dto);
+  }
+
+  /* ────────────────────────────────────────────────
+     PATCH /<%= kebabName %>/:id
+  ──────────────────────────────────────────────── */
+  @Patch(':id')
+  @Roles('admin', 'editor')
+  @Permissions('<%= kebabName %>:update')
+  @ApiOperation({ summary: 'Atualizar <%= kebabName %>.' })
+  @ApiParam({ name: 'id', description: 'ID do <%= kebabName %>', type: String })
+  @ApiBody({ type: Update<%= pascalName %>Dto })
+  @ApiOkResponse({ description: '<%= pascalName %> atualizado.' })
+  update(@Param('id') id: string, @Body() dto: Update<%= pascalName %>Dto) {
+    return this.<%= camelName %>Service.update(id, dto);
+  }
+
+  /* ────────────────────────────────────────────────
+     GET /<%= kebabName %>
+  ──────────────────────────────────────────────── */
+  @Get()
+  @Roles('user', 'admin')
+  @Permissions('<%= kebabName %>:read')
+  @ApiOperation({ summary: 'Listar <%= kebabName %>.' })
+  @ApiOkResponse({ description: 'Lista de <%= kebabName %>.' })
+  findAll() {
+    return this.<%= camelName %>Service.findAll();
+  }
+
+  /* ────────────────────────────────────────────────
+     GET /<%= kebabName %>/:id
+  ──────────────────────────────────────────────── */
+  @Get(':id')
+  @Roles('user', 'admin')
+  @Permissions('<%= kebabName %>:read')
+  @ApiOperation({ summary: 'Buscar <%= kebabName %> por ID.' })
+  @ApiParam({ name: 'id', description: 'ID do <%= kebabName %>', type: String })
+  @ApiOkResponse({ description: '<%= pascalName %> encontrado.' })
+  findOne(@Param('id') id: string) {
+    return this.<%= camelName %>Service.findOne(id);
+  }
+
+  /* ────────────────────────────────────────────────
+     DELETE /<%= kebabName %>/:id
+  ──────────────────────────────────────────────── */
+  @Delete(':id')
+  @Roles('admin')
+  @Permissions('<%= kebabName %>:delete')
+  @ApiOperation({ summary: 'Deletar <%= kebabName %> por ID.' })
+  @ApiParam({ name: 'id', description: 'ID do <%= kebabName %>', type: String })
+  @ApiOkResponse({ description: '<%= pascalName %> deletado com sucesso.' })
+  delete(@Param('id') id: string) {
+    return this.<%= camelName %>Service.delete(id);
+  }
+}

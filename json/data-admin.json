@@ -1,0 +1,8 @@
+{
+  "configuracoesApp": {
+    "id": "string",
+    "versaoAtual": "string",
+    "termosUsoURL": "string",
+    "politicaPrivacidadeURL": "string"
+  }
+}

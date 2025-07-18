@@ -1,0 +1,43 @@
+import { Injectable } from '@nestjs/common';
+import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
+
+import { <%= pascalName %> } from 'src/<%= kebabName %>/domain/entities/<%= kebabName %>.entity';
+import { Create<%= pascalName %>Dto } from 'src/<%= kebabName %>/interface/http/dto/create-<%= kebabName %>.dto';
+
+import { <%= pascalName %> as <%= pascalName %>Mongoose } from './entities/<%= kebabName %>.entity';
+import { Mongoose<%= pascalName %>Mapper } from './mappers/mongoose-<%= kebabName %>-mapper';
+import { Update<%= pascalName %>Dto } from 'src/<%= kebabName %>/interface/http/dto/update-<%= kebabName %>.dto';
+import { I<%= pascalName %>RepositoryPort } from 'src/<%= kebabName %>/domain/repositories/<%= kebabName %>.repository.port';
+
+@Injectable()
+export class Mongoose<%= pascalName %>Repository implements I<%= pascalName %>RepositoryPort {
+  constructor(
+    @InjectModel(<%= pascalName %>Mongoose.name)
+    private readonly model: Model<<%= pascalName %>Mongoose>
+  ) {}
+
+  async findMany(): Promise<<%= pascalName %>[]> {
+    const docs = await this.model.find();
+    return docs.map(Mongoose<%= pascalName %>Mapper.toDomain);
+  }
+
+  async create(data: Create<%= pascalName %>Dto): Promise<<%= pascalName %>> {
+    const doc = await this.model.create(data);
+    return Mongoose<%= pascalName %>Mapper.toDomain(doc);
+  }
+
+  async findOne(query: object): Promise<<%= pascalName %> | null> {
+    const doc = await this.model.findOne(query).exec();
+    return doc ? Mongoose<%= pascalName %>Mapper.toDomain(doc) : null;
+  }
+
+  async update(id: string, data: Update<%= pascalName %>Dto): Promise<<%= pascalName %> | null> {
+    const updated = await this.model.findByIdAndUpdate(id, data, { new: true }).exec();
+    return updated ? Mongoose<%= pascalName %>Mapper.toDomain(updated) : null;
+  }
+
+  async delete(id: string): Promise<void> {
+    await this.model.findByIdAndDelete(query).exec();
+  }
+}

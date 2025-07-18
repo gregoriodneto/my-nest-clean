@@ -1,0 +1,28 @@
+{
+  "produto": {
+    "id": "string",
+    "nome": "string",
+    "descricao": "string",
+    "codigoEAN": "string",
+    "imagemURL": "string",
+    "precoOriginal": "number",
+    "precoPromocional": "number",
+    "categoriaId": "string"
+  },
+  "categoriaProduto": {
+    "id": "string",
+    "nome": "string",
+    "descricao": "string"
+  },
+  "loja": {
+    "id": "string",
+    "nome": "string",
+    "endereco": "string",
+    "cidade": "string",
+    "estado": "string",
+    "cep": "string",
+    "latitude": "number",
+    "longitude": "number",
+    "telefone": "string"
+  }
+}

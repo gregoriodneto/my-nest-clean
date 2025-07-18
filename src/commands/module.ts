@@ -11,7 +11,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export default async function moduleCommand(
-    opts?: { name?: string ,path?: string, json?: string }
+    opts?: { name?: string ,path?: string, json?: string, typeModule?: string }
 ) {
     const answers = await inquirer.prompt([
         {
@@ -31,6 +31,11 @@ export default async function moduleCommand(
             name: 'json',
             message: 'Arquivo JSON (opcional):',
             default: opts.json || '',
+        },{
+          type: 'input',
+          name: 'typeModule',
+          message: 'Tipo do módulo (simple/microservice):',
+          default: opts.typeModule || 'simple',
         },
     ]);
 
@@ -53,11 +58,14 @@ export default async function moduleCommand(
         try {
             jsonData = JSON.parse(await fs.readFile(jsonPath, 'utf-8'));
             const modules = await convertInTypesModules(jsonData);
-
+            const moduleType = answers.typeModule === 'microservice'
+                ? '../../templates/module-microservice'
+                : '../../templates/module';
+                
             for (const mod of modules) {
                 const moduleDir = path.join(root, 'src', mod.kebabName);
                 await copyTemplate(
-                    path.join(__dirname, '../../templates/module'),
+                    path.join(__dirname, moduleType),
                     moduleDir,
                     mod
                 );

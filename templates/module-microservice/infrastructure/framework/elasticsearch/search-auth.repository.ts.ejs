@@ -1,0 +1,85 @@
+import { Injectable } from "@nestjs/common";
+import { <%camelName%> } from '../../../domain/entities/<%kebabName%>.entity';
+import { IElasticsearchPort } from '../../../domain/repositories/elasticsearch.repository.port';
+import { Search<%camelName%>Mapper } from "./mappers/search-<%kebabName%>-mapper";
+import { ElasticsearchService } from "@nestjs/elasticsearch";
+
+@Injectable()
+export class Search<%camelName%>Repository implements IElasticsearchPort {    
+    constructor(private readonly elastic: ElasticsearchService) { }
+
+    async save(doc: <%camelName%>) {
+        await this.elastic.index<<%camelName%>>({
+            index: '<%kebabName%>',
+            id: doc.id,
+            body: doc
+        });
+    }
+
+    async search(query: Partial<<%camelName%>>): Promise<<%camelName%>[]> {
+        if (Object.keys(query).length === 0) {
+            const result = await this.elastic.search({ index: '<%kebabName%>' });
+            return result.hits.hits.map(hit => Search<%camelName%>Mapper.toDomain(hit._source));
+        }
+
+        const must = Object.entries(query).map(([key, value]) => ({
+            match: { [key]: value }
+        }));
+
+        const result = await this.elastic.search<<%camelName%>>({
+            index: '<%kebabName%>',
+            body: {
+                query: {
+                    bool: {
+                        must
+                    }
+                }
+            }
+        });
+
+        return result.hits.hits.map(hit => Search<%camelName%>Mapper.toDomain(hit._source));
+    }
+
+    async searchOne(query: Partial<<%camelName%>>): Promise<<%camelName%> | null> {
+      const must = Object.entries(query).map(([key, value]) => ({
+        match: { [key]: value }
+      }));
+
+      const result = await this.elastic.search<Auth>({
+        index: '<%kebabName%>',
+        size: 1,
+        body: {
+            query: {
+                bool: {
+                    must
+                }
+            }
+        }
+      });
+
+      const hits = result.hits?.hits;
+      return hits ? Search<%camelName%>Mapper.toDomain(hits[0]._source) : null;
+    }
+
+    async delete(id: string): Promise<void> {
+        await this.elastic.delete({
+            index: '<%kebabName%>',
+            id
+        });
+    }
+
+    async update(id: string, doc: <%camelName%>) {
+        const result = await this.elastic.update<<%camelName%>>({
+            index: '<%kebabName%>',
+            id,
+            doc: {
+                doc
+            }
+        });
+        return Search<%camelName%>Mapper.toDomain(result);
+    }
+
+    async exists(id: string) {
+        return await this.elastic.exists({index: '<%kebabName%>', id});
+    }
+}

@@ -11,13 +11,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export default async function initServiceCommand(
-    opts?: { name?: string, path?: string, json?: string }
+    opts?: { name?: string, path?: string, json?: string, typeService?: string }
 ) {    
     const answers = await inquirer.prompt([
         {
           type: 'input',
           name: 'name',
-          message: 'Nome do módulo:',
+          message: 'Nome do serviço:',
           default: opts.name || 'example',
         },
         {
@@ -31,6 +31,12 @@ export default async function initServiceCommand(
             name: 'json',
             message: 'Arquivo JSON para carregar os atributos (opcional):',
             default: opts.json || '',
+        },
+        {
+          type: 'input',
+          name: 'typeService',
+          message: 'Tipo do serviço:',
+          default: opts.typeService || 'microservice',
         },
     ]);
 
@@ -54,22 +60,18 @@ export default async function initServiceCommand(
             jsonData = JSON.parse(await fs.readFile(jsonPath, 'utf-8'));
             const modules = await convertInTypesModules(jsonData);
 
+            const serviceType = answers.typeService === 'auth'
+                ? '../../templates/base-auth-project'
+                : '../../templates/base-project-microservice';
+
             for (const mod of modules) {
                 const moduleDir = path.join(root, mod.kebabName);
                 
-                if (mod.kebabName === "auth") {
-                    await copyTemplate(
-                        path.join(__dirname, '../../templates/base-auth-project'),
-                        moduleDir,
-                        mod
-                    );
-                } else {
-                    await copyTemplate(
-                        path.join(__dirname, '../../templates/base-project-microservice'),
-                        moduleDir,
-                        mod
-                    );
-                }
+                await copyTemplate(
+                    path.join(__dirname, serviceType),
+                    moduleDir,
+                    mod
+                );
                 
                 console.log(`Microserviço ${mod.kebabName} gerando em ${moduleDir}`);
                 // Instalando as dependências
