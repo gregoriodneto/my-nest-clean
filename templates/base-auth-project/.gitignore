@@ -1,6 +1,8 @@
 # Node modules
 node_modules/
 
+mongo-data/
+
 # Build output
 dist/
 build/
