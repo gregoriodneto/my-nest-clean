@@ -1,0 +1,12 @@
+import { <%camelName%> } from "../entities/<%kebabName%>.entity";
+
+export interface IElasticsearchPort {
+  save(doc: <%camelName%>): Promise<void>;
+  search(query: Partial<<%camelName%>>): Promise<<%camelName%>[]>;
+  searchOne(query: Partial<<%camelName%>>): Promise<<%camelName%> | null>;
+  delete(id: string): Promise<void>;
+  update(id: string, doc: <%camelName%>): Promise<<%camelName%>>;
+  exists(id: string): Promise<boolean>;
+}
+
+export const ELASTIC_REPOSITORY = Symbol("ELASTIC_REPOSITORY");

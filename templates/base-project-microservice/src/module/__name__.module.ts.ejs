@@ -13,9 +13,13 @@ import { <%= pascalName %>, <%= pascalName %>Schema } from './infrastructure/fra
 import { <%= constantName %>_REPOSITORY } from './domain/repositories/<%= kebabName %>.repository.port';
 import { Mongoose<%= pascalName %>Repository } from './infrastructure/framework/mongo/mongoose-<%= kebabName %>.repository';
 import { KafkaModule } from 'src/<%= kebabName %>/infrastructure/frameworks/kafka/kafka.module';
+import { SearchModule } from './infrastructure/framework/elasticsearch/search.module';
+import { ELASTIC_REPOSITORY } from './domain/repositories/elasticsearch.repository.port';
+import { Search<%= pascalName %>Repository } from './infrastructure/framework/elasticsearch/search-<%= kebabName %>.repository';
 
 @Module({
   imports: [
+    SearchModule,
     KafkaModule,
     MongooseModule.forFeature([
       { name: <%= pascalName %>.name, schema: <%= pascalName %>Schema },
@@ -31,7 +35,9 @@ import { KafkaModule } from 'src/<%= kebabName %>/infrastructure/frameworks/kafk
     Update<%= pascalName %>UseCase,
     FindMany<%= pascalName %>sUseCase,
     FindOne<%= pascalName %>UseCase,
+    ElasticsearchService,
     { provide: <%= constantName %>_REPOSITORY, useClass: Mongoose<%= pascalName %>Repository },
+    { provide: ELASTIC_REPOSITORY, useClass: Search<%= pascalName %>Repository }
   ],
 })
 export class <%= pascalName %>Module {}
