@@ -1,5 +1,5 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { Search<%= pascalName %>Repository } from 'src/<%= kebabName %>/infrastructure/freamework/search/search-category.repository';
+import { ELASTIC_REPOSITORY, IElasticsearchPort } from '../../domain/repositories/elasticsearch.repository.port';
 import { I<%= pascalName %>RepositoryPort, <%= constantName %>_REPOSITORY } from 'src/<%= kebabName %>/domain/repositories/<%= kebabName %>.repository.port';
 import { KeycloakService } from '../../infrastructure/framework/keycloak/keycloak.service';
 
@@ -8,7 +8,8 @@ export class Delete<%= pascalName %>UseCase {
   constructor(
     @Inject(<%= constantName %>_REPOSITORY)
     private readonly repo: I<%= pascalName %>RepositoryPort,
-    private readonly searchRepository: Search<%= pascalName %>Repository,
+    @Inject(ELASTIC_REPOSITORY)
+    private readonly searchRepository: IElasticsearchPort,
     private readonly keycloakService: KeycloakService,
   ) {}
 

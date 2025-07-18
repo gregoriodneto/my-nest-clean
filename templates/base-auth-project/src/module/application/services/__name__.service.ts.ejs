@@ -38,7 +38,7 @@ export class <%= pascalName %>Service {
   }
 
   async login(dto: Login<%= pascalName %>Dto) {
-    return await this.update<%= pascalName %>UC.execute(id, dto);
+    return await this.login<%= pascalName %>UC.execute(dto);
   }
 
   async logout(refreshToken: string) {
@@ -49,8 +49,8 @@ export class <%= pascalName %>Service {
     return await this.findMany<%= pascalName %>sUC.execute();
   }
 
-  async findOne(id: string) {
-    return await this.findOne<%= pascalName %>UC.execute(id);
+  async findOne(query: Partial<<%= pascalName %>>) {
+    return await this.findOne<%= pascalName %>UC.execute(query);
   }
 
   async delete(id: string) {

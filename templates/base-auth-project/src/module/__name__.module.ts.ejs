@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import { <%= pascalName %>Controller } from './interface/http/controllers/<%= kebabName %>.controller';
-import { Message<% pascalName %>ConsumerController } from './interface/http/controllers/message-<% kebabName %>-consumer.controller';
 import { Create<%= pascalName %>UseCase } from './application/use-cases/create-<%= kebabName %>.use-case';
 import { Update<%= pascalName %>UseCase } from './application/use-cases/update-<%= kebabName %>.use-case';
 import { FindOne<%= pascalName %>UseCase } from './application/use-cases/find-one-<%= kebabName %>.use-case';
@@ -15,18 +14,17 @@ import { <%= pascalName %>Service } from './application/services/<%= kebabName %
 import { <%= pascalName %>, <%= pascalName %>Schema } from './infrastructure/framework/mongo/entities/<%= kebabName %>.entity';
 import { <%= constantName %>_REPOSITORY } from './domain/repositories/<%= kebabName %>.repository.port';
 import { Mongoose<%= pascalName %>Repository } from './infrastructure/framework/mongo/mongoose-<%= kebabName %>.repository';
-import { KafkaModule } from 'src/<%= kebabName %>/infrastructure/frameworks/kafka/kafka.module';
+import { SearchModule } from './infrastructure/framework/elasticsearch/search.module';
 
 @Module({
   imports: [
-    KafkaModule,
+    SearchModule,
     MongooseModule.forFeature([
       { name: <%= pascalName %>.name, schema: <%= pascalName %>Schema },
     ]),
   ],
   controllers: [
     <%= pascalName %>Controller,
-    Message<% pascalName %>ConsumerController,
   ],
   providers: [
     <%= pascalName %>Service,
@@ -37,7 +35,10 @@ import { KafkaModule } from 'src/<%= kebabName %>/infrastructure/frameworks/kafk
     Register<%= pascalName %>UseCase,
     Login<%= pascalName %>UseCase,
     Logout<%= pascalName %>UseCase,
+    Delete<%= pascalName %>UseCase,
+    ElasticsearchService,
     { provide: <%= constantName %>_REPOSITORY, useClass: Mongoose<%= pascalName %>Repository },
+    { provide: ELASTIC_REPOSITORY, useClass: Search<%= pascalName %>Repository }
   ],
 })
 export class <%= pascalName %>Module {}

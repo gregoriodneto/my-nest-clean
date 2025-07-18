@@ -40,4 +40,8 @@ export class Mongoose<%= pascalName %>Repository implements I<%= pascalName %>Re
   async delete(id: string): Promise<void> {
     await this.model.findByIdAndDelete(query).exec();
   }
+
+  async findByEmail(email: string): Promise<<%= pascalName %> | null> {
+    return await this.model.findOne({ email });
+  }
 }

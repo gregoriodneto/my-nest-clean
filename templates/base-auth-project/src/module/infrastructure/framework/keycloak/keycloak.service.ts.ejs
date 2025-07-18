@@ -4,7 +4,7 @@ import KeycloakAdminClient from '@keycloak/keycloak-admin-client';
 @Injectable()
 export class KeycloakService implements OnModuleInit {
     private readonly logger = new Logger(KeycloakService.name);
-    private readonly keycloakAdmin: KeycloakAdminClient;
+    private keycloakAdmin!: KeycloakAdminClient;
 
     async onModuleInit() {
         this.keycloakAdmin = new KeycloakAdminClient({
@@ -60,11 +60,8 @@ export class KeycloakService implements OnModuleInit {
         });
     }
 
-    async logout(refreshToken: string) {
-        return this.keycloakAdmin.authz.logout({
-            clientId: process.env.KEYCLOAK_CLIENT_ID,
-            refreshToken,
-        });
+    async logout(userId: string) {
+        return this.keycloakAdmin.users.logout({ id: userId });
     }
 
     async updateUser(userId: string, updates: { email?: string; password?: string }) {

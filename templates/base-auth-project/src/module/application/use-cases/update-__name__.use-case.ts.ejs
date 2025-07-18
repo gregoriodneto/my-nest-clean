@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Search<%= pascalName %>Repository } from 'src/<%= kebabName %>/infrastructure/freamework/search/search-category.repository';
+import { ELASTIC_REPOSITORY, IElasticsearchPort } from '../../domain/repositories/elasticsearch.repository.port';
 import { I<%= pascalName %>RepositoryPort, <%= constantName %>_REPOSITORY } from 'src/<%= kebabName %>/domain/repositories/<%= kebabName %>.repository.port';
 import { Update<%= pascalName %>Dto } from 'src/<%= kebabName %>/interface/http/dto/update-<%= kebabName %>.dto';
 import { KeycloakService } from 'src/auth/infrastructure/keycloak/keycloak.service';
@@ -9,7 +9,8 @@ export class Update<%= pascalName %>UseCase {
   constructor(
     @Inject(<%= constantName %>_REPOSITORY)
     private readonly repo: I<%= pascalName %>RepositoryPort,
-    private readonly searchRepository: Search<%= pascalName %>Repository,
+    @Inject(ELASTIC_REPOSITORY)
+    private readonly searchRepository: IElasticsearchPort,
     private readonly keycloakService: KeycloakService,
   ) {}
 
