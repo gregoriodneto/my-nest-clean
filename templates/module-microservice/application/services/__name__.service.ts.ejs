@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { Create<%= pascalName %>UseCase } from 'src/<%= kebabName %>/application/use-cases/create-<%= kebabName %>.use-case';
-import { Update<%= pascalName %>UseCase } from 'src/<%= kebabName %>/application/use-cases/update-<%= kebabName %>.use-case';
-import { FindMany<%= pascalName %>sUseCase } from 'src/<%= kebabName %>/application/use-cases/find-many-<%= kebabName %>s.use-case';
-import { FindOne<%= pascalName %>UseCase } from 'src/<%= kebabName %>/application/use-cases/find-one-<%= kebabName %>.use-case';
-import { Delete<%= pascalName %>UseCase } from 'src/<%= kebabName %>/application/use-cases/delete-<%= kebabName %>s.use-case';
-import { Create<%= pascalName %>Dto } from 'src/<%= kebabName %>/interface/http/dto/create-<%= kebabName %>.dto';
-import { Update<%= pascalName %>Dto } from 'src/<%= kebabName %>/interface/http/dto/update-<%= kebabName %>.dto';
+import { Create<%= pascalName %>UseCase } from '../../application/use-cases/create-<%= kebabName %>.use-case';
+import { Update<%= pascalName %>UseCase } from '../../application/use-cases/update-<%= kebabName %>.use-case';
+import { FindMany<%= pascalName %>sUseCase } from '../../application/use-cases/find-many-<%= kebabName %>s.use-case';
+import { FindOne<%= pascalName %>UseCase } from '../../application/use-cases/find-one-<%= kebabName %>.use-case';
+import { Delete<%= pascalName %>UseCase } from '../../application/use-cases/delete-<%= kebabName %>s.use-case';
+import { Create<%= pascalName %>Dto } from '../../interface/http/dto/create-<%= kebabName %>.dto';
+import { Update<%= pascalName %>Dto } from '../../interface/http/dto/update-<%= kebabName %>.dto';
 
 @Injectable()
 export class <%= pascalName %>Service {
@@ -30,10 +30,10 @@ export class <%= pascalName %>Service {
   }
 
   async findOne(id: string) {
-    return await this.findOne<%= pascalName %>UC.execute({ _id: id });
+    return await this.findOne<%= pascalName %>UC.execute(id);
   }
 
   async delete(id: string) {
-    return await this.delete<%= pascalName %>UC.execute({ _id: id });
+    return await this.delete<%= pascalName %>UC.execute(id);
   }
 }

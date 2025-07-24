@@ -1,25 +1,21 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { ELASTIC_REPOSITORY, IElasticsearchPort } from '../../domain/repositories/elasticsearch.repository.port';
 import { I<%= pascalName %>RepositoryPort, <%= constantName %>_REPOSITORY } from 'src/<%= kebabName %>/domain/repositories/<%= kebabName %>.repository.port';
-import { KeycloakService } from '../../infrastructure/framework/keycloak/keycloak.service';
+import { Search<%= pascalName %>Repository } from '../../infrastructure/framework/elasticsearch/search-<%= kebabName %>.repository';
 
 @Injectable()
 export class Delete<%= pascalName %>UseCase {
   constructor(
     @Inject(<%= constantName %>_REPOSITORY)
     private readonly repo: I<%= pascalName %>RepositoryPort,
-    @Inject(ELASTIC_REPOSITORY)
-    private readonly searchRepository: IElasticsearchPort,
-    private readonly keycloakService: KeycloakService,
+    private readonly searchRepository: Search<%= pascalName %>Repository,
   ) {}
 
   async execute(id: string): Promise<void> {
-    const exists = await this.repo.findOne({ id });
+    const exists = await this.repo.findById(id);
 
     if (!exists) {
       throw new NotFoundException('<%= pascalName %> not found');
     }
-    await this.keycloakService.deleteUser(id);
     await this.repo.delete(id);
     await this.searchRepository.delete(id);
   }

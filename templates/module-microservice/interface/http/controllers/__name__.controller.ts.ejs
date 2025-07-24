@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, UseGuards, Delete } from '@nestjs/common';
 import {
   ApiBody,
   ApiCreatedResponse,
@@ -12,15 +12,15 @@ import {
   ResourceGuard,
   RoleGuard,
 } from 'nest-keycloak-connect';
-import { Roles, Permissions } from 'src/interface/decorators/roles.decorator';
+import { Roles, Permissions } from '../../decorators/roles.decorator';
 import { Create<%= pascalName %>Dto } from '../dto/create-<%= kebabName %>.dto';
 import { Update<%= pascalName %>Dto } from '../dto/update-<%= kebabName %>.dto';
 
-import { <%= pascalName %>Service } from 'src/<%= kebabName %>/application/services/<%= kebabName %>.service';
+import { <%= pascalName %>Service } from '../../../application/services/<%= kebabName %>.service';
 
 @ApiTags('<%= pascalName %>')
 @Controller('<%= kebabName %>')
-@UseGuards(AuthGuard, ResourceGuard, RoleGuard)
+//@UseGuards(AuthGuard, ResourceGuard, RoleGuard)
 export class <%= pascalName %>Controller {
   constructor(private readonly <%= camelName %>Service: <%= pascalName %>Service) {}
 

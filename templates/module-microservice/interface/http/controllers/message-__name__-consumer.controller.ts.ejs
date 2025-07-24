@@ -3,7 +3,7 @@ import { MessagePattern, Payload, Ctx, KafkaContext } from '@nestjs/microservice
 
 @Controller()
 export class Message<% pascalName %>ConsumerController {
-    private readonly logger = new Logger(KafkaConsumerController.name);
+    private readonly logger = new Logger(Message<% pascalName %>ConsumerController.name);
 
     @MessagePattern('<% kebabName %>-message-broker')
     async handleMessage(@Payload() message: any, @Ctx() context: KafkaContext) {

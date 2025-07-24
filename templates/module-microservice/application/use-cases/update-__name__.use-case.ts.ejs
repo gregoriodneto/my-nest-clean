@@ -1,32 +1,19 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ELASTIC_REPOSITORY, IElasticsearchPort } from '../../domain/repositories/elasticsearch.repository.port';
 import { I<%= pascalName %>RepositoryPort, <%= constantName %>_REPOSITORY } from 'src/<%= kebabName %>/domain/repositories/<%= kebabName %>.repository.port';
 import { Update<%= pascalName %>Dto } from 'src/<%= kebabName %>/interface/http/dto/update-<%= kebabName %>.dto';
-import { KeycloakService } from 'src/auth/infrastructure/keycloak/keycloak.service';
+import { Search<%= pascalName %>Repository } from '../../infrastructure/framework/elasticsearch/search-<%= kebabName %>.repository';
 
 @Injectable()
 export class Update<%= pascalName %>UseCase {
   constructor(
     @Inject(<%= constantName %>_REPOSITORY)
     private readonly repo: I<%= pascalName %>RepositoryPort,
-    @Inject(ELASTIC_REPOSITORY)
-    private readonly searchRepository: IElasticsearchPort,
-    private readonly keycloakService: KeycloakService,
+    private readonly searchRepository: Search<%= pascalName %>Repository,
   ) {}
 
   async execute(id: string, dto: Update<%= pascalName %>Dto) {
-    if (dto.email || dto.password) {
-      await this.keycloakService.updateUser(
-        id, 
-        { 
-          email: dto.email,
-          password: dto.password
-        }
-      );
-    }
-
     const updated = await this.repo.update(id, dto);
-    await this.searchRepository.save(updated);
+    if (updated) await this.searchRepository.save(updated);
     return updated;
   }
 }

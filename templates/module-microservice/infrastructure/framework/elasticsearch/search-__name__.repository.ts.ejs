@@ -1,33 +1,33 @@
 import { Injectable } from "@nestjs/common";
-import { <%camelName%> } from '../../../domain/entities/<%kebabName%>.entity';
+import { <%= pascalName %> } from '../../../domain/entities/<%= kebabName %>.entity';
 import { IElasticsearchPort } from '../../../domain/repositories/elasticsearch.repository.port';
-import { Search<%camelName%>Mapper } from "./mappers/search-<%kebabName%>.mapper";
+import { Search<%= pascalName %>Mapper } from "./mappers/search-<%= kebabName %>.mapper";
 import { ElasticsearchService } from "@nestjs/elasticsearch";
 
 @Injectable()
-export class Search<%camelName%>Repository implements IElasticsearchPort {    
+export class Search<%= pascalName %>Repository implements IElasticsearchPort {    
     constructor(private readonly elastic: ElasticsearchService) { }
 
-    async save(doc: <%camelName%>) {
-        await this.elastic.index<<%camelName%>>({
-            index: '<%kebabName%>',
+    async save(doc: <%= pascalName %>) {
+        await this.elastic.index<<%= pascalName %>>({
+            index: '<%= kebabName %>',
             id: doc.id,
             body: doc
         });
     }
 
-    async search(query: Partial<<%camelName%>>): Promise<<%camelName%>[]> {
+    async search(query: Partial<<%= pascalName %>>): Promise<<%= pascalName %>[]> {
         if (Object.keys(query).length === 0) {
-            const result = await this.elastic.search({ index: '<%kebabName%>' });
-            return result.hits.hits.map(hit => Search<%camelName%>Mapper.toDomain(hit._source));
+            const result = await this.elastic.search({ index: '<%= kebabName %>' });
+            return result.hits.hits.map(hit => Search<%= pascalName %>Mapper.toDomain(hit._source));
         }
 
         const must = Object.entries(query).map(([key, value]) => ({
             match: { [key]: value }
         }));
 
-        const result = await this.elastic.search<<%camelName%>>({
-            index: '<%kebabName%>',
+        const result = await this.elastic.search<<%= pascalName %>>({
+            index: '<%= kebabName %>',
             body: {
                 query: {
                     bool: {
@@ -37,16 +37,16 @@ export class Search<%camelName%>Repository implements IElasticsearchPort {
             }
         });
 
-        return result.hits.hits.map(hit => Search<%camelName%>Mapper.toDomain(hit._source));
+        return result.hits.hits.map(hit => Search<%= pascalName %>Mapper.toDomain(hit._source));
     }
 
-    async searchOne(query: Partial<<%camelName%>>): Promise<<%camelName%> | null> {
+    async searchOne(query: Partial<<%= pascalName %>>): Promise<<%= pascalName %> | null> {
       const must = Object.entries(query).map(([key, value]) => ({
         match: { [key]: value }
       }));
 
       const result = await this.elastic.search<Auth>({
-        index: '<%kebabName%>',
+        index: '<%= kebabName %>',
         size: 1,
         body: {
             query: {
@@ -58,28 +58,43 @@ export class Search<%camelName%>Repository implements IElasticsearchPort {
       });
 
       const hits = result.hits?.hits;
-      return hits ? Search<%camelName%>Mapper.toDomain(hits[0]._source) : null;
+      return hits ? Search<%= pascalName %>Mapper.toDomain(hits[0]._source) : null;
+    }
+
+    async searchOneById(id: string): Promise<<%= pascalName %> | null> {
+        const result = await this.elastic.search<<%= pascalName %>>({
+            index: 'auth',
+            size: 1,
+            query: {
+                term: {
+                    id,
+                }
+            }
+        });
+
+        const hits = result.hits?.hits;
+        return hits?.[0]?._source ? Search<%= pascalName %>Mapper.toDomain(hits[0]._source) : null;
     }
 
     async delete(id: string): Promise<void> {
         await this.elastic.delete({
-            index: '<%kebabName%>',
+            index: '<%= kebabName %>',
             id
         });
     }
 
-    async update(id: string, doc: <%camelName%>) {
-        const result = await this.elastic.update<<%camelName%>>({
-            index: '<%kebabName%>',
+    async update(id: string, doc: <%= pascalName %>) {
+        const result = await this.elastic.update<<%= pascalName %>>({
+            index: '<%= kebabName %>',
             id,
             doc: {
                 doc
             }
         });
-        return Search<%camelName%>Mapper.toDomain(result);
+        return Search<%= pascalName %>Mapper.toDomain(result);
     }
 
     async exists(id: string) {
-        return await this.elastic.exists({index: '<%kebabName%>', id});
+        return await this.elastic.exists({index: '<%= kebabName %>', id});
     }
 }

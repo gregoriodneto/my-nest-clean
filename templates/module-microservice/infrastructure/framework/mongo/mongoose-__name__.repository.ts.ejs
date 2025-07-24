@@ -32,6 +32,11 @@ export class Mongoose<%= pascalName %>Repository implements I<%= pascalName %>Re
     return doc ? Mongoose<%= pascalName %>Mapper.toDomain(doc) : null;
   }
 
+  async findById(id: string): Promise<<%= pascalName %> | null> {
+    const doc = await this.model.findById(id).exec();
+    return doc ? Mongoose<%= pascalName %>Mapper.toDomain(doc) : null;
+  }
+
   async update(id: string, data: Update<%= pascalName %>Dto): Promise<<%= pascalName %> | null> {
     const updated = await this.model.findByIdAndUpdate(id, data, { new: true }).exec();
     return updated ? Mongoose<%= pascalName %>Mapper.toDomain(updated) : null;

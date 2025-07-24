@@ -2,12 +2,13 @@ import { Create<%= pascalName %>Dto } from 'src/<%= kebabName %>/interface/http/
 import { Update<%= pascalName %>Dto } from 'src/<%= kebabName %>/interface/http/dto/update-<%= kebabName %>.dto';
 import { <%= pascalName %> } from '../entities/<%= kebabName %>.entity';
 
-export abstract class I<%= pascalName %>RepositoryPort {
-  abstract findMany(): Promise<<%= pascalName %>[]>;
-  abstract create(data: Create<%= pascalName %>Dto): Promise<<%= pascalName %>>;
-  abstract findOne(query: object): Promise<<%= pascalName %> | null>;
-  abstract update(id: string, data: Update<%= pascalName %>Dto): Promise<<%= pascalName %> | null>;
-  abstract delete(id: string): Promise<void>;
+export interface I<%= pascalName %>RepositoryPort {
+  findMany(): Promise<<%= pascalName %>[]>;
+  create(data: Create<%= pascalName %>Dto): Promise<<%= pascalName %>>;
+  findOne(query: object): Promise<<%= pascalName %> | null>;
+  findById(id: string): Promise<<%= pascalName %> | null>;
+  update(id: string, data: Update<%= pascalName %>Dto): Promise<<%= pascalName %> | null>;
+  delete(id: string): Promise<void>;
 }
 
 export const <%= constantName %>_REPOSITORY = Symbol('<%= constantName %>_REPOSITORY');
