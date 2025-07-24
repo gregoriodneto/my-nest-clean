@@ -43,6 +43,6 @@ export class Mongoose<%= pascalName %>Repository implements I<%= pascalName %>Re
   }
 
   async delete(id: string): Promise<void> {
-    await this.model.findByIdAndDelete(query).exec();
+    await this.model.findByIdAndDelete(id).exec();
   }
 }

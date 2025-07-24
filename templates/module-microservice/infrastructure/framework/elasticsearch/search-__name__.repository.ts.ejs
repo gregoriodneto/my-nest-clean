@@ -45,7 +45,7 @@ export class Search<%= pascalName %>Repository implements IElasticsearchPort {
         match: { [key]: value }
       }));
 
-      const result = await this.elastic.search<Auth>({
+      const result = await this.elastic.search<<%= pascalName %>>({
         index: '<%= kebabName %>',
         size: 1,
         body: {

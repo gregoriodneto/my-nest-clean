@@ -1,7 +1,7 @@
-import { <%camelName%> as <%camelName%>Entity } from '../../../../domain/entities/<%kebabName%>.entity';
+import { <%=camelName%> as <%=camelName%>Entity } from '../../../../domain/entities/<%=kebabName%>.entity';
 
-export class Search<%camelName%>Mapper {
-  static toDomain(doc: any): <%camelName%>Entity {
+export class Search<%=camelName%>Mapper {
+  static toDomain(doc: any): <%=camelName%>Entity {
     const entity = new <%= pascalName %>Entity();
     entity.id = doc._id.toString();
 <% fields.forEach(({ name }) => { if (name !== 'id') { -%>

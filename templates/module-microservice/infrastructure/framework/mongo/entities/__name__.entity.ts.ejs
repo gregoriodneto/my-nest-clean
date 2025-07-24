@@ -5,11 +5,11 @@ export type <%= pascalName %>Document = <%= pascalName %> & Document;
 
 @Schema({ timestamps: true })
 export class <%= pascalName %> {
-  _id: mongoose.Schema.Types.ObjectId;
+  _id!: mongoose.Schema.Types.ObjectId;
 
   <% fields.forEach(({ name, tsType }) => { if (name !== 'id') { -%> 
   @Prop()  
-  <%- name %> : <%- tsType  %> 
+  <%- name %>?: <%- tsType  %>;
   <% } }) -%>
   
 }
